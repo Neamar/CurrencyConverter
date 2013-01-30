@@ -10,14 +10,17 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONException;
-import org.json.JSONObject;
+import org.json.JSONObject; 
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.Html;
-import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -64,6 +67,44 @@ public class MainActivity extends Activity {
 				}
 			}
 		});
+	}
+	
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		MenuInflater inflater = getMenuInflater();
+		inflater.inflate(R.menu.activity_details, menu);
+		return true;
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		// Click on title in actionbar
+		switch (item.getItemId()) {
+		case android.R.id.home:
+			finish();
+			return true;
+		case R.id.menu_share:
+			shareResult();
+			return true;
+		default:
+			return super.onOptionsItemSelected(item);
+		}
+	}
+	
+	protected void shareResult()
+	{
+		if(resultsText.getVisibility() == View.VISIBLE)
+		{
+			Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
+			sharingIntent.setType("text/plain");
+			sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, resultsText.getText().toString());
+	
+			startActivity(Intent.createChooser(sharingIntent, "Share rate"));
+		}
+		else
+		{
+			Toast.makeText(this, "Please convert a value before sharing.", Toast.LENGTH_SHORT).show();
+		}
 	}
 
 	private class ConvertTask extends AsyncTask<String, Void, String> {

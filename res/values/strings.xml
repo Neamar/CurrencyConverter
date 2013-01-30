@@ -3,8 +3,9 @@
     <string name="app_name">Currency Converter</string>
     <string name="hello_world">Hello world!</string>
     <string name="menu_settings">Settings</string>
+    <string name="menu_share">Share</string>
     <string name="title_activity_main">Currency Converter</string>
     <string name="spinner_from_prompt">Select origin currency:</string>
-    <string name="spinner_to_prompt">Select origin currency:</string>
+    <string name="spinner_to_prompt">Select destination currency:</string>
 
 </resources>
