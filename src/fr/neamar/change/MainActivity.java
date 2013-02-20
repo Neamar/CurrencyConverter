@@ -16,6 +16,7 @@ import org.json.JSONObject;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.Html;
@@ -45,7 +46,10 @@ public class MainActivity extends Activity {
 		final EditText valueText = (EditText) findViewById(R.id.text_value);
 		final Spinner fromSpinner = (Spinner) findViewById(R.id.spinner_from);
 		final Spinner toSpinner = (Spinner) findViewById(R.id.spinner_to);
-		toSpinner.setSelection(1);
+
+		fromSpinner.setSelection(getPreferences(MODE_PRIVATE).getInt("from", 0));
+		toSpinner.setSelection(getPreferences(MODE_PRIVATE).getInt("to", 1));
+
 		final Button convert = (Button) findViewById(R.id.button_convert);
 
 		// Format number
@@ -71,6 +75,12 @@ public class MainActivity extends Activity {
 				String value = valueText.getText().toString();
 				String from = (String) fromSpinner.getSelectedItem();
 				String to = (String) toSpinner.getSelectedItem();
+
+				// Save preference for future usage:
+				SharedPreferences.Editor editor = getPreferences(MODE_PRIVATE).edit();
+				editor.putInt("from", (int) fromSpinner.getSelectedItemId());
+				editor.putInt("to", (int) toSpinner.getSelectedItemId());
+				editor.commit();
 
 				if (value.equals(""))
 					value = "1";
@@ -140,8 +150,8 @@ public class MainActivity extends Activity {
 
 			// Create a new HttpClient and Post Header
 			HttpClient httpclient = new DefaultHttpClient();
-			HttpGet httpget = new HttpGet("http://www.google.com/ig/calculator?hl=en&q=" + value.replaceAll("[^0-9\\.]", "")
-					+ from + "=?" + to);
+			HttpGet httpget = new HttpGet("http://www.google.com/ig/calculator?hl=en&q="
+					+ value.replaceAll("[^0-9\\.]", "") + from + "=?" + to);
 
 			try {
 				// Execute HTTP Post Request
