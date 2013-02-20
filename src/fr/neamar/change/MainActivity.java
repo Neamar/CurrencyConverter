@@ -3,6 +3,7 @@ package fr.neamar.change;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.net.URLEncoder;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
@@ -18,7 +19,6 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.Html;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -140,7 +140,7 @@ public class MainActivity extends Activity {
 
 			// Create a new HttpClient and Post Header
 			HttpClient httpclient = new DefaultHttpClient();
-			HttpGet httpget = new HttpGet("http://www.google.com/ig/calculator?hl=en&q=" + value
+			HttpGet httpget = new HttpGet("http://www.google.com/ig/calculator?hl=en&q=" + value.replaceAll("[^0-9\\.]", "")
 					+ from + "=?" + to);
 
 			try {
