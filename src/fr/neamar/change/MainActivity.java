@@ -18,6 +18,7 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.Html;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -147,9 +148,8 @@ public class MainActivity extends Activity {
 				HttpResponse response = httpclient.execute(httpget);
 
 				BufferedReader reader = new BufferedReader(new InputStreamReader(response
-						.getEntity().getContent(), "UTF-8"));
+						.getEntity().getContent(), "ISO-8859-1"));
 				String result = reader.readLine();
-
 				try {
 					JSONObject jsonResult = new JSONObject(result);
 					String error = jsonResult.getString("error");
