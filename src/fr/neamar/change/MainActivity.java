@@ -10,7 +10,7 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONException;
-import org.json.JSONObject; 
+import org.json.JSONObject;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
@@ -32,7 +32,7 @@ import android.widget.Toast;
 public class MainActivity extends Activity {
 
 	public TextView resultsText;
-	
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -43,7 +43,7 @@ public class MainActivity extends Activity {
 		final Spinner fromSpinner = (Spinner) findViewById(R.id.spinner_from);
 		final Spinner toSpinner = (Spinner) findViewById(R.id.spinner_to);
 		toSpinner.setSelection(1);
-		
+
 		Button convert = (Button) findViewById(R.id.button_convert);
 		convert.setOnClickListener(new OnClickListener() {
 
@@ -52,23 +52,21 @@ public class MainActivity extends Activity {
 				String value = valueText.getText().toString();
 				String from = (String) fromSpinner.getSelectedItem();
 				String to = (String) toSpinner.getSelectedItem();
-				
-				if(value.equals(""))
+
+				if (value.equals(""))
 					value = "1";
-				
-				if(from.equals(to))
-				{
-					Toast.makeText(MainActivity.this, "From and to currencies must be different.", Toast.LENGTH_SHORT).show();
+
+				if (from.equals(to)) {
+					Toast.makeText(MainActivity.this, "From and to currencies must be different.",
+							Toast.LENGTH_SHORT).show();
 					toSpinner.requestFocus();
-				}
-				else
-				{
+				} else {
 					new ConvertTask().execute(from, to, value);
 				}
 			}
 		});
 	}
-	
+
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		MenuInflater inflater = getMenuInflater();
@@ -90,26 +88,23 @@ public class MainActivity extends Activity {
 			return super.onOptionsItemSelected(item);
 		}
 	}
-	
-	protected void shareResult()
-	{
-		if(resultsText.getVisibility() == View.VISIBLE)
-		{
+
+	protected void shareResult() {
+		if (resultsText.getVisibility() == View.VISIBLE) {
 			Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
 			sharingIntent.setType("text/plain");
-			sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, resultsText.getText().toString());
-	
+			sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, resultsText.getText()
+					.toString());
+
 			startActivity(Intent.createChooser(sharingIntent, "Share rate"));
-		}
-		else
-		{
-			Toast.makeText(this, "Please convert a value before sharing.", Toast.LENGTH_SHORT).show();
+		} else {
+			Toast.makeText(this, "Please convert a value before sharing.", Toast.LENGTH_SHORT)
+					.show();
 		}
 	}
 
 	private class ConvertTask extends AsyncTask<String, Void, String> {
-		private final ProgressDialog dialog = new ProgressDialog(
-				MainActivity.this);
+		private final ProgressDialog dialog = new ProgressDialog(MainActivity.this);
 
 		@Override
 		protected void onPreExecute() {
@@ -126,33 +121,31 @@ public class MainActivity extends Activity {
 
 			// Create a new HttpClient and Post Header
 			HttpClient httpclient = new DefaultHttpClient();
-			HttpGet httpget = new HttpGet(
-					"http://www.google.com/ig/calculator?hl=en&q=" + value
-							+ from + "=?" + to);
+			HttpGet httpget = new HttpGet("http://www.google.com/ig/calculator?hl=en&q=" + value
+					+ from + "=?" + to);
 
 			try {
 				// Execute HTTP Post Request
 				HttpResponse response = httpclient.execute(httpget);
 
-				BufferedReader reader = new BufferedReader(
-						new InputStreamReader(
-								response.getEntity().getContent(), "UTF-8"));
+				BufferedReader reader = new BufferedReader(new InputStreamReader(response
+						.getEntity().getContent(), "UTF-8"));
 				String result = reader.readLine();
 
 				try {
 					JSONObject jsonResult = new JSONObject(result);
 					String error = jsonResult.getString("error");
-					if(!error.equals(""))
+					if (!error.equals(""))
 						return "An unexpected error occurred";
 					String lhs = jsonResult.getString("lhs");
 					String rhs = jsonResult.getString("rhs");
-					
-					return "<strong>" + lhs + "</strong><br /><small>is</small><br /><strong>" + rhs + "</strong>";
+
+					return "<strong>" + lhs + "</strong><br /><small>is</small><br /><strong>"
+							+ rhs + "</strong>";
 				} catch (JSONException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				
 
 			} catch (ClientProtocolException e) {
 				// TODO Auto-generated catch block
