@@ -18,11 +18,13 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.Html;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnKeyListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
@@ -43,9 +45,24 @@ public class MainActivity extends Activity {
 		final Spinner fromSpinner = (Spinner) findViewById(R.id.spinner_from);
 		final Spinner toSpinner = (Spinner) findViewById(R.id.spinner_to);
 		toSpinner.setSelection(1);
+		final Button convert = (Button) findViewById(R.id.button_convert);
 
+		// Format number
 		valueText.addTextChangedListener(new NumberTextWatcher(valueText));
-		Button convert = (Button) findViewById(R.id.button_convert);
+
+		// "Enter" means click on convert:
+		valueText.setOnKeyListener(new OnKeyListener() {
+			public boolean onKey(View v, int keyCode, KeyEvent event) {
+				// If the event is a key-down event on the "enter" button
+				if ((event.getAction() == KeyEvent.ACTION_DOWN)
+						&& (keyCode == KeyEvent.KEYCODE_ENTER)) {
+					convert.performClick();
+					return true;
+				}
+				return false;
+			}
+		});
+
 		convert.setOnClickListener(new OnClickListener() {
 
 			@Override
