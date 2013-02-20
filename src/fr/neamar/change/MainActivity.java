@@ -44,6 +44,7 @@ public class MainActivity extends Activity {
 		final Spinner toSpinner = (Spinner) findViewById(R.id.spinner_to);
 		toSpinner.setSelection(1);
 
+		valueText.addTextChangedListener(new NumberTextWatcher(valueText));
 		Button convert = (Button) findViewById(R.id.button_convert);
 		convert.setOnClickListener(new OnClickListener() {
 
