@@ -165,8 +165,12 @@ public class MainActivity extends Activity {
 
 		@Override
 		protected void onPostExecute(String results) {
-			if (this.dialog.isShowing())
-				this.dialog.dismiss();
+			if (this.dialog.isShowing()) {
+				try {
+					this.dialog.dismiss();
+				} catch (IllegalArgumentException e) {
+				}
+			}
 
 			resultsText.setVisibility(View.VISIBLE);
 			resultsText.setText(Html.fromHtml(results));
