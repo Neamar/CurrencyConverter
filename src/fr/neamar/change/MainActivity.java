@@ -113,6 +113,14 @@ public class MainActivity extends Activity {
 		case R.id.menu_share:
 			shareResult();
 			return true;
+		case R.id.menu_swap:
+			final Spinner fromSpinner = (Spinner) findViewById(R.id.spinner_from);
+			final Spinner toSpinner = (Spinner) findViewById(R.id.spinner_to);
+			int old_from = fromSpinner.getSelectedItemPosition();
+			int old_to = toSpinner.getSelectedItemPosition();
+			fromSpinner.setSelection(old_to);
+			toSpinner.setSelection(old_from);
+			return true;
 		default:
 			return super.onOptionsItemSelected(item);
 		}
